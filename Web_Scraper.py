@@ -5,7 +5,6 @@ sys.tracebacklimit=0
 import logging
 
 logger = logging.getLogger(__name__)
-#logging.basicConfig(filename = "wb_log.log", level = logging.INFO)
 logger.info('info log')
 logger.debug('debug log')
 
