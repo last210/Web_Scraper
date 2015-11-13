@@ -2,9 +2,15 @@ import urllib
 import re 
 import sys
 sys.tracebacklimit=0
+import logging
 
-if __name__ == "__main__":
-	user_input = raw_input("Enter URL to be scraped: ")
+logger = logging.getLogger(__name__)
+#logging.basicConfig(filename = "wb_log.log", level = logging.INFO)
+logger.info('info log')
+logger.debug('debug log')
+
+if __name__ == "main": main()
+user_input = raw_input("Enter URL to be scraped: ")
 
 def main():	
 	try:
