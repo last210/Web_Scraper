@@ -34,5 +34,5 @@ def main():
 		print "You did not enter a valid URL"
 	print_html(user_input)
 
-if __name__ == "main":
+if __name__ == "__main__": 
 	main()
