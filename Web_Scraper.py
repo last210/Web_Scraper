@@ -32,7 +32,18 @@ def main():
 	except:
 		logger.exception("URL exception")
 		print "You did not enter a valid URL"
+
 	print_html(user_input)
 
-if __name__ == "__main__": 
+def get_current_stock():
+    url = "http://finance.yahoo.com/q?s=rax&ql=1"
+    open_url = urllib.urlopen(url)
+    read_url = open_url.read()
+    find_price = '<span id="yfs_l84_rax">(.+?)</span>'
+    compile_price = re.compile(find_price)
+    price = re.findall(compile_price, read_url)
+    print "The current stock price of RAX is {0}".format(price)
+
+if __name__ == "__main__":
 	main()
+    get_current_stock()
