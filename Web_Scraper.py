@@ -36,14 +36,21 @@ def main():
 	print_html(user_input)
 
 def get_current_stock():
-    url = "http://finance.yahoo.com/q?s=rax&ql=1"
-    open_url = urllib.urlopen(url)
-    read_url = open_url.read()
-    find_price = '<span id="yfs_l84_rax">(.+?)</span>'
-    compile_price = re.compile(find_price)
-    price = re.findall(compile_price, read_url)
-    print "The current stock price of RAX is {0}".format(price)
+    open_stockfile = open("stocks.txt")
+    stockfile = open_stockfile.read()
+    user_stock = raw_input("Which stock would you like the current price of? ")
+
+    if user_stock.upper() in stockfile:
+        url = "http://finance.yahoo.com/q?s=" + user_stock + "&ql=1"
+        open_url = urllib.urlopen(url)
+        read_url = open_url.read()
+        find_price = '<span id="yfs_l84_' + user_stock.lower() + '">(.+?)</span>'
+        compile_price = re.compile(find_price)
+        price = re.findall(compile_price, read_url)
+        print "The current stock price of {0} is {1}".format(user_stock.upper(), price)
+    else:
+        print "You did not enter a valid stock"
 
 if __name__ == "__main__":
-	main()
+	#main()
     get_current_stock()
