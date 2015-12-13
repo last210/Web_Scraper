@@ -38,25 +38,34 @@ def main():
     print_html(user_input)
 
 
-def get_current_stock():
+def valid_stock():
+    configure_logging()
     open_stockfile = open("stocks.txt")
     stockfile = open_stockfile.read()
     user_stock = raw_input("Which stock would you like the current price of? ")
+    logger.info("USER INPUT: %s", user_stock)
 
     if user_stock.upper() in stockfile:
-        url = "http://finance.yahoo.com/q?s=" + user_stock + "&ql=1"
-        open_url = urllib.urlopen(url)
-        read_url = open_url.read()
-        find_price = ('<span id="yfs_l84_' +
-                      user_stock.lower() + '">(.+?)</span>')
-        compile_price = re.compile(find_price)
-        price = re.findall(compile_price, read_url)
-        print ("The current stock price of {0} is {1}".format(
-               user_stock.upper(), price))
+        try:
+            get_current_stock(user_stock)
+        except :
+            raise Exception("INVALID INPUT FROM USER")
     else:
+        logger.exception("INVALID INPUT FROM USER")
         print "You did not enter a valid stock"
 
+def get_current_stock(user_stock):
+    url = "http://finance.yahoo.com/q?s=" + user_stock + "&ql=1"
+    open_url = urllib.urlopen(url)
+    read_url = open_url.read()
+    find_price = ('<span id="yfs_l84_' +
+                 user_stock.lower() + '">(.+?)</span>')
+    compile_price = re.compile(find_price)
+    price = re.findall(compile_price, read_url)
+    print ("The current stock price of {0} is {1}".format(
+               user_stock.upper(), price))
 
 if __name__ == "__main__":
     # main()
-    get_current_stock()
+    # get_current_stock()
+    valid_stock()
