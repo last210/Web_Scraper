@@ -6,6 +6,14 @@ logger = logging.getLogger(__name__)
 logger.info('info log')
 logger.debug('debug log')
 
+class CustomException(Exception):
+    def __init__(self, message):
+        super(CustomException, self).__init__(message)
+        self.message = message
+
+    def __str__(self):
+        return str(self.message)
+
 
 def configure_logging():
     root_logger = logging.getLogger()
@@ -48,34 +56,36 @@ def valid_stock():
     if user_stock.upper() in stockfile:
         try:
             get_current_stock(user_stock)
-        except :
-            raise Exception("INVALID INPUT FROM USER")
+        except Exception, e:
+            raise CustomException(e.message)
     else:
-        logger.exception("INVALID INPUT FROM USER")
+        logger.exception("INVALID STOCK FROM USER")
         print "You did not enter a valid stock"
         try_again()
 
+
 def try_again():
     try_again = raw_input("Would you like to try again? [Y or N] ")
+
     if try_again.upper() == "Y":
         valid_stock()
     elif try_again.upper() == "N":
         print "Have a good day!"
     else:
-        print "You did not enter a valid response. Please enter Y or N. "
-        # still need prompt for new response
-        # enable exit after 3 attempts
+        raise CustomException("INVALID INPUT FROM USER")
+
 
 def get_current_stock(user_stock):
     url = "http://finance.yahoo.com/q?s=" + user_stock + "&ql=1"
     open_url = urllib.urlopen(url)
     read_url = open_url.read()
     find_price = ('<span id="yfs_l84_' +
-                 user_stock.lower() + '">(.+?)</span>')
+                  user_stock.lower() + '">(.+?)</span>')
     compile_price = re.compile(find_price)
     price = re.findall(compile_price, read_url)
     print ("The current stock price of {0} is {1}".format(
-               user_stock.upper(), price))
+        user_stock.upper(), price))
+
 
 if __name__ == "__main__":
     # main()
