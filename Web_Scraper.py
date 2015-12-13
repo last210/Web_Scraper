@@ -53,6 +53,18 @@ def valid_stock():
     else:
         logger.exception("INVALID INPUT FROM USER")
         print "You did not enter a valid stock"
+        try_again()
+
+def try_again():
+    try_again = raw_input("Would you like to try again? [Y or N] ")
+    if try_again.upper() == "Y":
+        valid_stock()
+    elif try_again.upper() == "N":
+        print "Have a good day!"
+    else:
+        print "You did not enter a valid response. Please enter Y or N. "
+        # still need prompt for new response
+        # enable exit after 3 attempts
 
 def get_current_stock(user_stock):
     url = "http://finance.yahoo.com/q?s=" + user_stock + "&ql=1"
